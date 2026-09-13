@@ -1,0 +1,24 @@
+{
+  "name": "Chess Trainer",
+  "short_name": "Chess Trainer",
+  "description": "Offline chess repertoire practice and flashcard trainer",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#151515",
+  "theme_color": "#151515",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/chess-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/chess-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

@@ -1,0 +1,344 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  min-height: 100%;
+  background: #151515;
+  overscroll-behavior: none;
+}
+
+body {
+  margin: 0;
+  width: 100%;
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #151515;
+  color: white;
+  -webkit-tap-highlight-color: transparent;
+  text-rendering: optimizeSpeed;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.app {
+  width: 100%;
+  min-height: 100vh;
+  padding: 16px;
+}
+
+h1 {
+  text-align: center;
+  margin: 0 0 22px;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 28px;
+}
+
+.board-wrapper {
+  width: min(620px, calc(100vw - 32px));
+  flex: 0 0 auto;
+}
+
+.board {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+
+  /*
+   * Important for phone tap-to-move.
+   * We do not block pointer events on pieces.
+   */
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+
+  contain: layout paint;
+}
+
+.board * {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.panel {
+  width: 400px;
+  background: #242424;
+  padding: 20px;
+  border-radius: 14px;
+}
+
+.side-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.side-selector label {
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.side-selector input {
+  margin-right: 8px;
+}
+
+.moves {
+  min-height: 70px;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  background: #181818;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.panel > button,
+.saved-line > button,
+.sync-section > button,
+.analysis-result > button {
+  width: 100%;
+  min-height: 46px;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #eeeeee;
+  color: #111;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.panel > button:active,
+.saved-line > button:active,
+.sync-section > button:active,
+.analysis-result > button:active {
+  transform: scale(0.985);
+}
+
+.saved-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.saved-line {
+  padding: 14px;
+  border-radius: 10px;
+  background: #181818;
+}
+
+.saved-line-info {
+  margin-bottom: 12px;
+}
+
+.saved-line-info > strong {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 18px;
+}
+
+.branch-count {
+  color: #aaa;
+  font-size: 14px;
+}
+
+.branch-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.branch {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  background: #242424;
+  color: #ccc;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.branch span {
+  flex: 1;
+}
+
+.branch .small-delete-button {
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: #4a2525;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.message {
+  margin: 15px 0 0;
+  padding: 12px;
+  border-radius: 8px;
+  background: #333;
+  text-align: center;
+}
+
+.practice-info {
+  padding: 10px;
+  background: #181818;
+  border-radius: 8px;
+  line-height: 1.6;
+}
+
+.sync-section {
+  margin-top: 25px;
+}
+
+.pgn-input {
+  width: 100%;
+  min-height: 180px;
+  resize: vertical;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #555;
+  border-radius: 8px;
+  background: #151515;
+  color: white;
+  line-height: 1.5;
+}
+
+.analysis-result {
+  margin: 15px 0;
+  padding: 14px;
+  border-radius: 10px;
+  background: #181818;
+}
+
+.analysis-result h3 {
+  margin-top: 0;
+}
+
+.analysis-label {
+  color: #aaa;
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+
+.analysis-history {
+  padding: 10px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  background: #242424;
+  line-height: 1.6;
+}
+
+.analysis-deviation {
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  background: #3a2525;
+  line-height: 1.7;
+}
+
+.analysis-good {
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  background: #203727;
+}
+
+@media (max-width: 950px) {
+  .content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .panel {
+    width: min(620px, calc(100vw - 32px));
+  }
+}
+
+@media (max-width: 600px) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  .app {
+    padding: 0;
+  }
+
+  h1 {
+    font-size: 21px;
+    margin: 10px 8px 12px;
+  }
+
+  .content {
+    width: 100%;
+    gap: 12px;
+  }
+
+  .board-wrapper {
+    width: 100vw;
+  }
+
+  .board {
+    width: 100vw;
+    max-width: 100vw;
+    touch-action: manipulation;
+  }
+
+  .panel {
+    width: calc(100vw - 16px);
+    margin: 0 8px 12px;
+    padding: 14px;
+    border-radius: 12px;
+  }
+
+  .panel h2 {
+    margin-top: 8px;
+  }
+
+  .panel > button,
+  .saved-line > button,
+  .sync-section > button,
+  .analysis-result > button {
+    min-height: 50px;
+    font-size: 16px;
+  }
+
+  .moves {
+    min-height: 64px;
+  }
+
+  .pgn-input {
+    font-size: 16px;
+  }
+}

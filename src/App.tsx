@@ -508,10 +508,6 @@ function App() {
     event.target.value = "";
   }
 
-  // =========================
-  // PRACTICE
-  // =========================
-
   function beginPracticeRound(
     rep: Repertoire,
     line: string[],
@@ -824,10 +820,6 @@ function App() {
     resetBoard();
   }
 
-  // =========================
-  // FLASHCARDS
-  // =========================
-
   function getFlashcardCandidates(
     rep: Repertoire
   ) {
@@ -1046,10 +1038,6 @@ function App() {
     return true;
   }
 
-  // =========================
-  // NORMAL MOVES
-  // =========================
-
   function makeNormalMove(
     sourceSquare: Square,
     targetSquare: Square
@@ -1158,10 +1146,6 @@ function App() {
       setSelectedSquare(null);
     }
   }
-
-  // =========================
-  // ANALYSIS
-  // =========================
 
   function analyzeAgainstRepertoire(
     rep: Repertoire,
@@ -1435,7 +1419,6 @@ function App() {
         await file.text();
 
       setAnalysisPgn(text);
-
       analyzePgn(text);
     } catch {
       setMessage(
@@ -1516,6 +1499,32 @@ function App() {
         <div className="panel">
           {analysisMode ? (
             <>
+              <div className="top-actions">
+                <button
+                  onClick={openGamePicker}
+                >
+                  Open PGN file
+                </button>
+
+                <button
+                  onClick={() =>
+                    analyzePgn(
+                      analysisPgn
+                    )
+                  }
+                >
+                  Analyze
+                </button>
+
+                <button
+                  onClick={
+                    stopAnalysis
+                  }
+                >
+                  Exit analysis
+                </button>
+              </div>
+
               <h2>Game Analysis</h2>
 
               <p className="practice-info">
@@ -1523,14 +1532,6 @@ function App() {
                 immediately after the first
                 move that left your repertoire.
               </p>
-
-              <button
-                onClick={
-                  openGamePicker
-                }
-              >
-                Open PGN file
-              </button>
 
               <input
                 ref={gameInputRef}
@@ -1556,16 +1557,6 @@ function App() {
                   )
                 }
               />
-
-              <button
-                onClick={() =>
-                  analyzePgn(
-                    analysisPgn
-                  )
-                }
-              >
-                Analyze
-              </button>
 
               {selectedAnalysis && (
                 <p className="practice-info">
@@ -1709,18 +1700,41 @@ function App() {
                   </div>
                 )
               )}
-
-              <button
-                onClick={
-                  stopAnalysis
-                }
-              >
-                Exit analysis
-              </button>
             </>
           ) : !practiceRepertoire &&
             !flashcardRepertoire ? (
             <>
+              <div className="top-actions">
+                <button
+                  onClick={saveLine}
+                >
+                  Save line
+                </button>
+
+                <button
+                  onClick={undoMove}
+                  disabled={
+                    moves.length === 0
+                  }
+                >
+                  Undo move
+                </button>
+
+                <button
+                  onClick={resetBoard}
+                >
+                  Reset board
+                </button>
+
+                <button
+                  onClick={
+                    startAnalysis
+                  }
+                >
+                  Analyze game
+                </button>
+              </div>
+
               <h2>Create line</h2>
 
               <div className="side-selector">
@@ -1758,35 +1772,6 @@ function App() {
                   ? "Make some moves..."
                   : formatLine(moves)}
               </div>
-
-              <button
-                onClick={saveLine}
-              >
-                Save line
-              </button>
-
-              <button
-                onClick={undoMove}
-                disabled={
-                  moves.length === 0
-                }
-              >
-                Undo move
-              </button>
-
-              <button
-                onClick={resetBoard}
-              >
-                Reset board
-              </button>
-
-              <button
-                onClick={
-                  startAnalysis
-                }
-              >
-                Analyze game
-              </button>
 
               <div className="sync-section">
                 <h2>
@@ -1923,6 +1908,35 @@ function App() {
             </>
           ) : practiceRepertoire ? (
             <>
+              <div className="top-actions">
+                <button
+                  onClick={
+                    showPracticeHint
+                  }
+                  disabled={
+                    isOpponentMoving
+                  }
+                >
+                  Hint
+                </button>
+
+                <button
+                  onClick={
+                    restartPractice
+                  }
+                >
+                  Restart practice
+                </button>
+
+                <button
+                  onClick={
+                    stopPractice
+                  }
+                >
+                  Exit practice
+                </button>
+              </div>
+
               <h2>Practice</h2>
 
               <p className="practice-info">
@@ -1952,86 +1966,61 @@ function App() {
                   ? "Starting line..."
                   : formatLine(moves)}
               </div>
-
-              <button
-                onClick={
-                  showPracticeHint
-                }
-                disabled={
-                  isOpponentMoving
-                }
-              >
-                Hint
-              </button>
-
-              <button
-                onClick={
-                  restartPractice
-                }
-              >
-                Restart practice
-              </button>
-
-              <button
-                onClick={
-                  stopPractice
-                }
-              >
-                Exit practice
-              </button>
             </>
           ) : (
             <>
+              <div className="top-actions">
+                <button
+                  onClick={
+                    showFlashcardHint
+                  }
+                  disabled={
+                    isLoadingNextFlashcard
+                  }
+                >
+                  Hint
+                </button>
+
+                <button
+                  onClick={() => {
+                    if (
+                      flashcardRepertoire &&
+                      !isLoadingNextFlashcard
+                    ) {
+                      nextFlashcard(
+                        flashcardRepertoire
+                      );
+                    }
+                  }}
+                >
+                  Next position
+                </button>
+
+                <button
+                  onClick={
+                    showFlashcardAnswer
+                  }
+                  disabled={
+                    isLoadingNextFlashcard
+                  }
+                >
+                  Show answer
+                </button>
+
+                <button
+                  onClick={
+                    stopFlashcard
+                  }
+                >
+                  Exit flashcard
+                </button>
+              </div>
+
               <h2>Flashcard</h2>
 
               <p className="practice-info">
                 Find the best move.
               </p>
-
-              <button
-                onClick={
-                  showFlashcardHint
-                }
-                disabled={
-                  isLoadingNextFlashcard
-                }
-              >
-                Hint
-              </button>
-
-              <button
-                onClick={() => {
-                  if (
-                    flashcardRepertoire &&
-                    !isLoadingNextFlashcard
-                  ) {
-                    nextFlashcard(
-                      flashcardRepertoire
-                    );
-                  }
-                }}
-              >
-                Next position
-              </button>
-
-              <button
-                onClick={
-                  showFlashcardAnswer
-                }
-                disabled={
-                  isLoadingNextFlashcard
-                }
-              >
-                Show answer
-              </button>
-
-              <button
-                onClick={
-                  stopFlashcard
-                }
-              >
-                Exit flashcard
-              </button>
             </>
           )}
 

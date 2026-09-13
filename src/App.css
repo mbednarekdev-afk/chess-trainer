@@ -40,12 +40,14 @@ button:disabled {
 .app {
   width: 100%;
   min-height: 100vh;
-  padding: 12px;
+  padding: 14px;
 }
 
-/* Hide the big title */
 h1 {
-  display: none;
+  display: block;
+  text-align: center;
+  margin: 0 0 18px;
+  font-size: 34px;
 }
 
 .content {
@@ -53,11 +55,12 @@ h1 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .board-wrapper {
-  width: min(620px, calc(100vw - 24px));
+  width: min(620px, calc(100vw - 28px));
+  flex: 0 0 auto;
 }
 
 .board {
@@ -75,14 +78,40 @@ h1 {
 }
 
 .panel {
-  width: min(620px, calc(100vw - 24px));
-  background: #242424;
-  padding: 16px;
-  border-radius: 14px;
+  width: min(620px, calc(100vw - 28px));
+  padding: 0 0 16px;
+  background: transparent;
 }
 
-.panel h2:first-child {
-  margin-top: 0;
+.panel h2 {
+  margin-top: 24px;
+}
+
+.panel h3 {
+  margin-top: 18px;
+}
+
+.top-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.top-actions button {
+  width: 100%;
+  min-height: 50px;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #eeeeee;
+  color: #111;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.top-actions button:active {
+  transform: scale(0.985);
 }
 
 .side-selector {
@@ -90,6 +119,9 @@ h1 {
   flex-direction: column;
   gap: 12px;
   margin-bottom: 20px;
+  padding: 14px;
+  background: #242424;
+  border-radius: 10px;
 }
 
 .side-selector label {
@@ -111,12 +143,15 @@ h1 {
   overflow-wrap: anywhere;
 }
 
-.panel > button,
-.saved-line > button,
+.sync-section {
+  margin-top: 26px;
+}
+
 .sync-section > button,
+.saved-line > button,
 .analysis-result > button {
   width: 100%;
-  min-height: 46px;
+  min-height: 48px;
   padding: 12px;
   margin-bottom: 10px;
   border: none;
@@ -127,9 +162,8 @@ h1 {
   font-weight: 600;
 }
 
-.panel > button:active,
-.saved-line > button:active,
 .sync-section > button:active,
+.saved-line > button:active,
 .analysis-result > button:active {
   transform: scale(0.985);
 }
@@ -209,14 +243,10 @@ h1 {
 }
 
 .practice-info {
-  padding: 10px;
+  padding: 12px;
   background: #181818;
   border-radius: 8px;
   line-height: 1.6;
-}
-
-.sync-section {
-  margin-top: 25px;
 }
 
 .pgn-input {
@@ -282,8 +312,13 @@ h1 {
     padding: 0;
   }
 
+  h1 {
+    font-size: 26px;
+    margin: 10px 8px 12px;
+  }
+
   .content {
-    gap: 8px;
+    gap: 6px;
   }
 
   .board-wrapper {
@@ -299,16 +334,19 @@ h1 {
   .panel {
     width: calc(100vw - 12px);
     margin: 0 6px 12px;
-    padding: 12px;
-    border-radius: 10px;
+    padding: 0 0 12px;
   }
 
-  .panel > button,
-  .saved-line > button,
-  .sync-section > button,
-  .analysis-result > button {
+  .top-actions {
+    gap: 6px;
+    margin-top: 0;
+    margin-bottom: 16px;
+  }
+
+  .top-actions button {
     min-height: 50px;
-    font-size: 16px;
+    font-size: 15px;
+    padding: 10px 6px;
   }
 
   .moves {
@@ -317,5 +355,11 @@ h1 {
 
   .pgn-input {
     font-size: 16px;
+  }
+}
+
+@media (max-width: 380px) {
+  .top-actions {
+    grid-template-columns: 1fr;
   }
 }

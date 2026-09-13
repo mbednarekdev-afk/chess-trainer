@@ -40,39 +40,33 @@ button:disabled {
 .app {
   width: 100%;
   min-height: 100vh;
-  padding: 16px;
+  padding: 12px;
 }
 
+/* Hide the big title */
 h1 {
-  text-align: center;
-  margin: 0 0 22px;
+  display: none;
 }
 
 .content {
+  width: 100%;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 28px;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
 }
 
 .board-wrapper {
-  width: min(620px, calc(100vw - 32px));
-  flex: 0 0 auto;
+  width: min(620px, calc(100vw - 24px));
 }
 
 .board {
   width: 100%;
   aspect-ratio: 1 / 1;
-
-  /*
-   * Important for phone tap-to-move.
-   * We do not block pointer events on pieces.
-   */
   touch-action: manipulation;
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
-
   contain: layout paint;
 }
 
@@ -81,10 +75,14 @@ h1 {
 }
 
 .panel {
-  width: 400px;
+  width: min(620px, calc(100vw - 24px));
   background: #242424;
-  padding: 20px;
+  padding: 16px;
   border-radius: 14px;
+}
+
+.panel h2:first-child {
+  margin-top: 0;
 }
 
 .side-selector {
@@ -274,17 +272,6 @@ h1 {
   background: #203727;
 }
 
-@media (max-width: 950px) {
-  .content {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .panel {
-    width: min(620px, calc(100vw - 32px));
-  }
-}
-
 @media (max-width: 600px) {
   html,
   body {
@@ -295,14 +282,8 @@ h1 {
     padding: 0;
   }
 
-  h1 {
-    font-size: 21px;
-    margin: 10px 8px 12px;
-  }
-
   .content {
-    width: 100%;
-    gap: 12px;
+    gap: 8px;
   }
 
   .board-wrapper {
@@ -316,14 +297,10 @@ h1 {
   }
 
   .panel {
-    width: calc(100vw - 16px);
-    margin: 0 8px 12px;
-    padding: 14px;
-    border-radius: 12px;
-  }
-
-  .panel h2 {
-    margin-top: 8px;
+    width: calc(100vw - 12px);
+    margin: 0 6px 12px;
+    padding: 12px;
+    border-radius: 10px;
   }
 
   .panel > button,

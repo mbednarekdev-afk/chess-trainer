@@ -138,6 +138,9 @@ function App() {
   const [selectedAnalysis, setSelectedAnalysis] =
     useState<AnalysisResult | null>(null);
 
+  const [analysisWorkingMoves, setAnalysisWorkingMoves] =
+    useState<string[]>([]);
+
   useEffect(() => {
     localStorage.setItem(
       "chess-lines",
@@ -1070,12 +1073,49 @@ function App() {
     }
   }
 
+  function makeAnalysisMove(
+    sourceSquare: Square,
+    targetSquare: Square
+  ) {
+    if (!selectedAnalysis) return false;
+
+    const nextGame =
+      new Chess(game.fen());
+
+    try {
+      const move =
+        nextGame.move({
+          from: sourceSquare,
+          to: targetSquare,
+          promotion: "q",
+        });
+
+      if (!move) return false;
+
+      setGame(nextGame);
+      setAnalysisWorkingMoves((previous) => [
+        ...previous,
+        move.san,
+      ]);
+      setMessage(
+        `Added ${move.san}. Continue the line or save it to the repertoire.`
+      );
+
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
   function makeMove(
     sourceSquare: Square,
     targetSquare: Square
   ) {
     if (analysisMode) {
-      return false;
+      return makeAnalysisMove(
+        sourceSquare,
+        targetSquare
+      );
     }
 
     if (flashcardRepertoire) {
@@ -1102,7 +1142,7 @@ function App() {
     square: Square
   ) {
     if (
-      analysisMode ||
+      (analysisMode && !selectedAnalysis) ||
       isOpponentMoving ||
       isLoadingNextFlashcard
     ) {
@@ -1262,7 +1302,46 @@ function App() {
       )
     );
 
+    setAnalysisWorkingMoves([
+      ...result.positionHistory,
+    ]);
     setSelectedSquare(null);
+    setMessage(
+      "Position loaded. You can now make moves on the board and add the resulting line to this repertoire."
+    );
+  }
+
+  function addAnalysisLineToRepertoire() {
+    if (!selectedAnalysis) {
+      setMessage(
+        "Select an analyzed repertoire position first."
+      );
+      return;
+    }
+
+    if (analysisWorkingMoves.length === 0) {
+      setMessage(
+        "There is no line to add yet."
+      );
+      return;
+    }
+
+    const updated = cleanRepertoires([
+      ...repertoires,
+      {
+        side: selectedAnalysis.side,
+        lines: [[...analysisWorkingMoves]],
+      },
+    ]);
+
+    setRepertoires(updated);
+    setMessage(
+      `Line added to the ${
+        selectedAnalysis.side === "white"
+          ? "White"
+          : "Black"
+      } repertoire.`
+    );
   }
 
   function analyzePgn(
@@ -1330,6 +1409,9 @@ function App() {
             bestMatch.positionHistory
           )
         );
+        setAnalysisWorkingMoves([
+          ...bestMatch.positionHistory,
+        ]);
 
         if (
           bestMatch.deviationIndex !==
@@ -1357,6 +1439,9 @@ function App() {
             gameMoves
           )
         );
+        setAnalysisWorkingMoves([
+          ...gameMoves,
+        ]);
 
         setMessage(
           "No saved repertoire to compare against."
@@ -1387,6 +1472,7 @@ function App() {
     setAnalysisMoves([]);
     setAnalysisResults([]);
     setSelectedAnalysis(null);
+    setAnalysisWorkingMoves([]);
 
     setMessage("");
   }
@@ -1398,6 +1484,7 @@ function App() {
     setAnalysisMoves([]);
     setAnalysisResults([]);
     setSelectedAnalysis(null);
+    setAnalysisWorkingMoves([]);
 
     resetBoard();
   }
@@ -1447,7 +1534,8 @@ function App() {
 
                 allowDragging:
                   !isTouchDevice &&
-                  !analysisMode &&
+                  (!analysisMode ||
+                    !!selectedAnalysis) &&
                   !isOpponentMoving &&
                   !isLoadingNextFlashcard,
 
@@ -1457,7 +1545,8 @@ function App() {
                 }) => {
                   if (
                     isTouchDevice ||
-                    analysisMode ||
+                    (analysisMode &&
+                      !selectedAnalysis) ||
                     !targetSquare ||
                     isOpponentMoving ||
                     isLoadingNextFlashcard
@@ -1518,6 +1607,15 @@ function App() {
 
                 <button
                   onClick={
+                    addAnalysisLineToRepertoire
+                  }
+                  disabled={!selectedAnalysis}
+                >
+                  Add line to repertoire
+                </button>
+
+                <button
+                  onClick={
                     stopAnalysis
                   }
                 >
@@ -1531,6 +1629,10 @@ function App() {
                 The board shows the position
                 immediately after the first
                 move that left your repertoire.
+                You can continue playing from
+                that position and then add the
+                resulting line directly to the
+                selected repertoire.
               </p>
 
               <input
@@ -1559,16 +1661,30 @@ function App() {
               />
 
               {selectedAnalysis && (
-                <p className="practice-info">
-                  Showing{" "}
-                  <strong>
-                    {selectedAnalysis.side ===
-                    "white"
-                      ? "White"
-                      : "Black"}
-                  </strong>{" "}
-                  repertoire perspective
-                </p>
+                <>
+                  <p className="practice-info">
+                    Showing{" "}
+                    <strong>
+                      {selectedAnalysis.side ===
+                      "white"
+                        ? "White"
+                        : "Black"}
+                    </strong>{" "}
+                    repertoire perspective. Make
+                    moves on the board to extend
+                    this line.
+                  </p>
+
+                  <h3>Line to add</h3>
+                  <div className="moves">
+                    {analysisWorkingMoves.length ===
+                    0
+                      ? "No line loaded."
+                      : formatLine(
+                          analysisWorkingMoves
+                        )}
+                  </div>
+                </>
               )}
 
               {analysisMoves.length >
